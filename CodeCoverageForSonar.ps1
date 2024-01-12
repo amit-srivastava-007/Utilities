@@ -3,7 +3,7 @@ param(
     [Parameter(Position = 1, Mandatory = $false)][string]$generateReport,
     [Parameter(ParameterSetName = 'sonar', Mandatory = $false, Position = 3)][string]$runSonarAnalysis,
     [Parameter(ParameterSetName = 'sonar', Mandatory = $false)][string]$sonarUrl,
-    [Parameter(ParameterSetName = 'sonar', Mandatory = $false)][string]$sonarProjectKey = "momentum-services",
+    [Parameter(ParameterSetName = 'sonar', Mandatory = $false)][string]$sonarProjectKey = "project_key",
     [Parameter(ParameterSetName = 'sonar', Mandatory = $false)][string]$sonarToken = "N"
 )
 #exit
@@ -144,12 +144,12 @@ if ($runSonarAnalysis -or $runSonarAnalysis -ne "N") {
     try {
         if ($sonarToken -eq "" -or $sonarToken -eq "N") {
             dotnet sonarscanner begin /k:$sonarProjectKey /d:sonar.host.url=$sonarUrl /d:sonar.cs.opencover.reportsPaths=$coverageDestination/coverage.opencover.xml
-            dotnet build .\Escape.Momentum.sln
+            dotnet build .\App.sln
             dotnet sonarscanner end
         }
         else {
             dotnet sonarscanner begin /k:$sonarProjectKey /d:sonar.host.url=$sonarUrl /d:sonar.login=$sonarToken  /d:sonar.cs.opencover.reportsPaths=$coverageDestination/coverage.opencover.xml
-            dotnet build .\Escape.Momentum.sln
+            dotnet build .\App.sln
             dotnet sonarscanner end /d:sonar.login=$sonarToken
         } 
     }
